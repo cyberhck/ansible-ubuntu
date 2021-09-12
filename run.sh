@@ -12,7 +12,7 @@ read -s password
 
 ansible-galaxy install -r requirements.yaml
 
-ansible-playbook main.yml --ask-become-pass --extra-vars "GH_TOKEN=$password"
+ansible-playbook local.yml --ask-become-pass --extra-vars "GH_TOKEN=$password"
 echo "delete the token you generated if you're done using the playbook for now"
 echo "https://github.com/settings/tokens"
 xdg-open "https://github.com/settings/tokens" || true

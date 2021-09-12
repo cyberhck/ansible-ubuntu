@@ -9,3 +9,7 @@
   import_playbook: shell.yml
 - name: setup ssh keys
   import_playbook: ssh.yml
+- name: setup git
+  import_playbook: git.yml
+- name: setup gpg keys
+  import_playbook: gpg.yml

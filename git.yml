@@ -1,0 +1,32 @@
+---
+- name: install common packages
+  hosts: localhost
+  connection: local
+  become: false
+  tasks:
+    - name: install git
+      become: true
+      apt:
+        pkg:
+          - git
+    - name: setup git config gpg sign
+      become: false
+      community.general.git_config:
+        name: commit.gpgsign
+        scope: global
+        value: true
+        state: present
+    - name: setup git config name
+      become: false
+      community.general.git_config:
+        name: user.name
+        scope: global
+        value: "Nishchal Gautam"
+        state: present
+    - name: setup git config email
+      become: false
+      community.general.git_config:
+        name: user.email
+        scope: global
+        value: "gautam.nishchal@gmail.com"
+        state: present
