@@ -13,3 +13,5 @@
   import_playbook: git.yml
 - name: setup gpg keys
   import_playbook: gpg.yml
+- name: install jetbrains toolbox
+  import_playbook: jetbrains_toolbox.yml

@@ -4,3 +4,4 @@ collections:
   - community.crypto
 roles:
   - gantsign.oh-my-zsh
+  - webarchitect609.jet_brains_toolbox

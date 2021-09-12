@@ -1,0 +1,10 @@
+- name: "install jetbrains toolbox"
+  hosts: localhost
+  connection: local
+  become: true
+  roles:
+    - { role: webarchitect609.jet_brains_toolbox }
+  vars:
+    toolbox_version: "1.21.9712"
+    toolbox_install_dir: "/opt"
+    toolbox_install_for_user: "{{ ansible_user_id }}"
