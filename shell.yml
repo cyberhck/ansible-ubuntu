@@ -1,0 +1,44 @@
+---
+- name: install guake and zsh
+  connection: local
+  hosts: localhost
+  become: false
+  pre_tasks:
+    - name: install zsh and powerline fonts
+      become: true
+      apt:
+        pkg:
+          - zsh
+          - fonts-powerline
+        state: latest
+    - name: change shell to zsh
+      become: true
+      shell: zsh
+  roles:
+    - role: gantsign.oh-my-zsh
+      oh_my_zsh_theme: powerlevel10k/powerlevel10k
+      oh_my_zsh_plugins:
+        - git
+      oh_my_zsh_install: yes
+      users:
+       - username: nishchal
+  post_tasks:
+    - name: install powerlevel10k/powerlevel10k theme
+      become: false
+      run_once: true
+      git:
+        repo: 'https://github.com/romkatv/powerlevel10k.git'
+        dest: '~/.oh-my-zsh/custom/themes/powerlevel10k'
+        force: yes
+        clone: yes
+        accept_hostkey: yes
+    - name: add p10k.zsh file
+      copy:
+        src: ./files/p10k.zsh
+        dest: '~/.p10k.zsh'
+    - name: source p10k.zsh
+      lineinfile:
+        path: '~/.zshrc'
+        insertafter: "source.*"
+        line: "source ~/.p10k.zsh"
+

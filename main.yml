@@ -1,0 +1,11 @@
+---
+- name: install common packages
+  import_playbook: common_packages.yml
+- name: install docker
+  import_playbook: docker.yml
+- name: install and setup guake
+  import_playbook: guake.yml
+- name: setup zsh
+  import_playbook: shell.yml
+- name: setup ssh keys
+  import_playbook: ssh.yml

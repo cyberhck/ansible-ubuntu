@@ -1,0 +1,35 @@
+---
+- name: install guake and zsh
+  hosts: localhost
+  connection: local
+  become: false
+  tasks:
+    - name: install guake terminal
+      become: true
+      apt:
+        name: guake
+        state: latest
+        update_cache: yes
+    - name: enable guake on startup
+      copy:
+        src: ./files/guake.desktop
+        dest: '~/.config/autostart/guake.desktop'
+    - name: set global shortcuts
+      dconf:
+        key: "/apps/guake/keybindings/global/{{ item.task }}"
+        value: "'{{ item.key }}'"
+        state: present
+      with_items:
+        - {task: 'show-hide', key: 'F1'}
+    - name: set local keybindings
+      dconf:
+        key: "/apps/guake/keybindings/local/{{ item.task }}"
+        value: "'{{ item.key }}'"
+        state: present
+      with_items:
+        - {task: 'decrease-transparency', key: '<Control><Shift>Down'}
+        - {task: 'increase-transparency', key: '<Control><Shift>Up'}
+        - {task: 'decrease-height', key: '<Control>Up'}
+        - {task: 'increase-height', key: '<Control>Down'}
+        - {task: 'next-tab', key: '<Primary><Shift>Right'}
+        - {task: 'previous-tab', key: '<Primary><Shift>Left'}

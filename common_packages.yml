@@ -1,0 +1,29 @@
+---
+- name: install common packages
+  hosts: localhost
+  connection: local
+  become: true
+  tasks:
+    - name: install apt packages
+      apt:
+        pkg:
+          - git
+          - obs-studio
+          - lm-sensors
+          - vlc
+        state: latest
+        update_cache: yes
+    - name: install classic snaps
+      community.general.snap:
+        name:
+          - slack
+          - gimp
+          - gitkraken
+        classic: yes
+    - name: install snap apps
+      community.general.snap:
+        name:
+          - discord
+          - postman
+          - insomnia
+          - gh
