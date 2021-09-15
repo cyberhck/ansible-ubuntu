@@ -2,19 +2,16 @@
 - name: setup ssh keys
   hosts: localhost
   connection: local
-  become: false
-  tasks:
-    - name: Generate id_rsa RSA host key
-      command : ssh-keygen -q -t rsa -f ~/.ssh/id_rsa -C "gautam.nishchal@gmail.com" -N ""
-      become: false
-      args:
-        creates: ~/.ssh/id_rsa
+  roles:
+    - {role: juju4.gpgkey_generate, gpg_user: "{{ ansible_user_id }}", gpg_generator_user: "{{ ansible_user_id }}", gpg_realname: "Nishchal Gautam", gpg_useremail: "gautam.nishchal@gmail.com"}
+  post_tasks:
     - name: Read SSH public key to authorize
-      shell: cat ~/.ssh/id_rsa.pub
+      shell: cat ./tmp/{{ansible_user_id}}-fingerprint
       register: ssh_pub_key
-    - name: add this ssh key to github
-      github_key:
-        name: desktop ubuntu home
-        token: '{{ GH_TOKEN }}'
-        pubkey: '{{ ssh_pub_key.stdout_lines }}'
-        state: present
+    - name: export public key
+      shell: gpg --armor --export "{{ ssh_pub_key.stdout_lines[0] }}"
+      register: gpg_key
+    - name: display public key
+      copy:
+        dest: /tmp/pub.pub
+        content: "{{gpg_key.stdout_lines | join('\n')}}"

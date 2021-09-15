@@ -1,0 +1,44 @@
+---
+- name: setup ssh keys
+  hosts: localhost
+  connection: local
+  become: false
+  tasks:
+    - name: Read SSH public key to authorize
+      shell: cat ~/.ssh/id_rsa.pub
+      register: ssh_pub_key
+    - name: add this ssh key to github
+      community.general.github_key:
+        name: desktop ubuntu home
+        token: '{{ GH_TOKEN }}'
+        pubkey: '{{ ssh_pub_key.stdout_lines[0] }}'
+        state: present
+    - name: Read SSH public key to authorize
+      shell: cat ./tmp/{{ansible_user_id}}-fingerprint
+      register: ssh_pub_key
+    - name: export public key
+      shell: gpg --armor --export "{{ ssh_pub_key.stdout_lines[0] }}"
+      register: gpg_key
+    - name: check if key already exists
+      uri:
+        url: https://api.github.com/user/gpg_keys
+        method: GET
+        body_format: json
+        headers:
+          Authorization: "Bearer {{ GH_TOKEN }}"
+        status_code: 200
+      register: response
+    - name: setup variable
+      set_fact:
+        gpg_exists: "{{ (response.json | pluck('raw_key')) | exists(gpg_key.stdout_lines | join('\n')) }}"
+
+    - name: upload to github
+      when: not gpg_exists
+      uri:
+        url: https://api.github.com/user/gpg_keys
+        method: POST
+        body_format: json
+        headers:
+          Authorization: "Bearer {{ GH_TOKEN }}"
+        body: '{"armored_public_key": "{{gpg_key.stdout_lines | join("\n")}}"}'
+        status_code: 201

@@ -9,9 +9,15 @@
   import_playbook: shell.yml
 - name: setup ssh keys
   import_playbook: ssh.yml
-- name: setup git
-  import_playbook: git.yml
 - name: setup gpg keys
   import_playbook: gpg.yml
+- name: setup git
+  import_playbook: git.yml
 - name: install jetbrains toolbox
   import_playbook: jetbrains_toolbox.yml
+- name: install google chrome
+  import_playbook: chrome.yml
+- name: setup github
+  import_playbook: github.yml
+- name: setup rust
+  import_playbook: rust.yml

@@ -1,0 +1,24 @@
+---
+- name: setup ssh keys
+  hosts: localhost
+  connection: local
+  become: false
+  tasks:
+    - name: Check if rust is installed
+      shell: which rustc
+      register: is_rust_installed_cmd
+      failed_when: false
+    - name: check if rust is isntalled
+      set_fact:
+        is_rust_installed: "{{is_rust_installed_cmd.stdout != ''}}"
+
+    - name: Generate id_rsa RSA host key
+      command : curl https://sh.rustup.rs -o /tmp/rust-install.sh
+      become: false
+      when: not is_rust_installed
+      args:
+        creates: /tmp/rust-install.sh
+    - name: install rust
+      command: "sh /tmp/rust-install.sh -y"
+      when: not is_rust_installed
+      changed_when: not is_rust_installed

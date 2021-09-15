@@ -10,6 +10,7 @@
           - obs-studio
           - lm-sensors
           - vlc
+          - steam
         state: latest
         update_cache: yes
     - name: install classic snaps

@@ -8,13 +8,4 @@
       command : ssh-keygen -q -t rsa -f ~/.ssh/id_rsa -C "gautam.nishchal@gmail.com" -N ""
       become: false
       args:
-        creates: ~/.ssh/id_rsa
-    - name: Read SSH public key to authorize
-      shell: cat ~/.ssh/id_rsa.pub
-      register: ssh_pub_key
-    - name: add this ssh key to github
-      github_key:
-        name: desktop ubuntu home
-        token: '{{ GH_TOKEN }}'
-        pubkey: '{{ ssh_pub_key.stdout_lines }}'
-        state: present
+        creates: ~/.ssh/id_rsa.pub

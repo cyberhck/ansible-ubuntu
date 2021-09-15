@@ -1,0 +1,28 @@
+---
+- name: install common packages
+  hosts: localhost
+  connection: local
+  become: false
+  tasks:
+    - name: install apt packages
+      become: true
+      apt:
+        pkg:
+          - golang
+        state: latest
+        update_cache: yes
+    - name: goroot & path
+      become: false
+      copy:
+        src: ./files/golang.zsh
+        dest: '~/.golang.zsh'
+    - name: source p10k.zsh
+      become: false
+      lineinfile:
+        path: '~/.zshrc'
+        insertafter: "source.*"
+        line: "source ~/.golang.zsh"
+    - name: create go directory
+      file:
+        path: ~/go/src
+        state: directory

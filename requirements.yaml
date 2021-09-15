@@ -5,3 +5,4 @@ collections:
 roles:
   - gantsign.oh-my-zsh
   - webarchitect609.jet_brains_toolbox
+  - juju4.gpgkey_generate
