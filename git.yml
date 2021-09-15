@@ -30,3 +30,12 @@
         scope: global
         value: "gautam.nishchal@gmail.com"
         state: present
+    - name: Read SSH public key to authorize
+      shell: cat ./tmp/{{ansible_user_id}}-fingerprint
+      register: ssh_pub_key
+    - name: Set gpg signing
+      become: false
+      community.general.git_config:
+        scope: global
+        name: user.signingkey
+        value: "{{ ssh_pub_key.stdout_lines[0] }}"
