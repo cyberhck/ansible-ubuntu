@@ -3,7 +3,7 @@
   hosts: localhost
   connection: local
   roles:
-    - {role: juju4.gpgkey_generate, gpg_user: "{{ ansible_user_id }}", gpg_generator_user: "{{ ansible_user_id }}", gpg_realname: "Nishchal Gautam", gpg_useremail: "gautam.nishchal@gmail.com"}
+    - {role: juju4.gpgkey_generate, gpg_user: "{{ ansible_user_id }}", gpg_generator_user: "{{ ansible_user_id }}", gpg_realname: "Nishchal Gautam", gpg_useremail: "gautam.nishchal@gmail.com", gpg_passphrase: ""}
   post_tasks:
     - name: Read SSH public key to authorize
       shell: cat ./tmp/{{ansible_user_id}}-fingerprint
