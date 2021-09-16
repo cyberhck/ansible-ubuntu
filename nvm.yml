@@ -1,0 +1,40 @@
+---
+- name: setup nvm
+  hosts: localhost
+  connection: local
+  become: false
+  tasks:
+    - name: Check if nvm is installed
+      shell: ls ~/.nvm.zsh
+      register: is_nvm_installed_cmd
+      failed_when: false
+    - name: set if nvm is available
+      set_fact:
+        is_nvm_installed: "{{is_nvm_installed_cmd.stdout != ''}}"
+    - name: download nvm install script
+      get_url:
+        url: https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh
+        dest: /tmp/install-nvm.sh
+      become: false
+      when: not is_nvm_installed
+    - name: show variable
+      debug:
+        msg: "{{ is_nvm_installed }}"
+    - name: install nvm
+      become: false
+      command: "bash /tmp/install-nvm.sh"
+      when: not is_nvm_installed
+      changed_when: not is_nvm_installed
+    - name: add nvm.sh to home dir
+      become: false
+      copy:
+        src: ./files/nvm.zsh
+        dest: '~/.nvm.zsh'
+      when: not is_nvm_installed
+    - name: source nvm.zsh
+      become: false
+      lineinfile:
+        path: '~/.zshrc'
+        insertafter: "source.*"
+        line: "source ~/.nvm.zsh"
+      when: not is_nvm_installed
