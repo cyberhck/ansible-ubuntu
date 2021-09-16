@@ -1,5 +1,5 @@
 ---
-- name: setup ssh keys
+- name: setup rustlang
   hosts: localhost
   connection: local
   become: false
@@ -12,7 +12,7 @@
       set_fact:
         is_rust_installed: "{{is_rust_installed_cmd.stdout != ''}}"
 
-    - name: Generate id_rsa RSA host key
+    - name: download rust setup script
       command : curl https://sh.rustup.rs -o /tmp/rust-install.sh
       become: false
       when: not is_rust_installed
