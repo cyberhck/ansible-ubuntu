@@ -1,0 +1,33 @@
+---
+- name: install guake and zsh
+  connection: local
+  hosts: localhost
+  become: false
+  tasks:
+    - name: Check if popcorn.zsh is created
+      shell: ls ~/.popcorn.zsh
+      register: is_popcorn_installed_cmd
+      failed_when: false
+    - name: set if popcorn is available
+      set_fact:
+        is_popcorn_installed: "{{is_popcorn_installed_cmd.stdout != ''}}"
+    - name: clone popcorn time
+      become: false
+      git:
+        repo: 'git@github.com:popcorn-official/popcorn-desktop.git'
+        dest: '~/git/personal/popcorn-desktop'
+        clone: yes
+        accept_hostkey: yes
+    - name: add popcorn.zsh to home dir
+      become: false
+      copy:
+        src: ./files/popcorn.zsh
+        dest: '~/.popcorn.zsh'
+      when: not is_popcorn_installed
+    - name: source popcorn.zsh
+      become: false
+      lineinfile:
+        path: '~/.zshrc'
+        insertafter: "source.*"
+        line: "source ~/.popcorn.zsh"
+      when: not is_popcorn_installed

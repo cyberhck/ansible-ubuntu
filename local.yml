@@ -23,3 +23,7 @@
   import_playbook: rust.yml
 - name: install 1password
   import_playbook: 1password.yml
+- name: install nvm
+  import_playbook: nvm.yml
+- name: install popcorn_time.yml
+  import_playbook: popcorn_time.yml

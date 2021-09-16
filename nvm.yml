@@ -17,9 +17,6 @@
         dest: /tmp/install-nvm.sh
       become: false
       when: not is_nvm_installed
-    - name: show variable
-      debug:
-        msg: "{{ is_nvm_installed }}"
     - name: install nvm
       become: false
       command: "bash /tmp/install-nvm.sh"
