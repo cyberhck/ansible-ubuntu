@@ -1,0 +1,18 @@
+---
+- name: configure color theme preferences
+  hosts: localhost
+  connection: local
+  become: false
+  tasks:
+    - name: set gedit 'solarized-dark' color scheme
+      become: false
+      dconf:
+        key: "/org/gnome/gedit/preferences/editor/scheme"
+        value: "'solarized-dark'"
+        state: present
+    - name: Use dark theme ubuntu
+      become: false
+      dconf:
+        key: "/org/gnome/desktop/interface/gtk-theme"
+        value: "'Yaru-dark'"
+        state: present
