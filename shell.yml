@@ -11,9 +11,9 @@
           - zsh
           - fonts-powerline
         state: latest
-    - name: change shell to zsh
+    - name: Switch to zsh
+      user: name={{ ansible_user_id }} shell=/bin/zsh
       become: true
-      shell: zsh
   roles:
     - role: gantsign.oh-my-zsh
       oh_my_zsh_theme: powerlevel10k/powerlevel10k
